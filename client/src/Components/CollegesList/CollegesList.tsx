@@ -14,6 +14,7 @@ import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { useAppSelector } from "../../Hooks/Selector";
 import { NavLink } from "react-router-dom";
+import { useActions } from "../../Hooks/Actions";
 
 interface Data {
   name: string;
@@ -66,12 +67,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox"></TableCell>
-        <TableCell padding={"none"}>Сollege name</TableCell>
-        <TableCell>Category</TableCell>
-        <TableCell>Status</TableCell>
+        <TableCell>Сollege name</TableCell>
+        <TableCell align="center">Category</TableCell>
+        <TableCell align="center">Status</TableCell>
         <TableCell
-          padding={"none"}
+          align="center"
           sortDirection={orderBy === "lastModified" ? order : false}
         >
           <TableSortLabel
@@ -115,6 +115,7 @@ const EnhancedTableToolbar = () => {
 
 export const CollegesList: FC = () => {
   const { collegesData } = useAppSelector((state) => state.colleges);
+  const { setName } = useActions();
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof Data>("lastModified");
   const [page, setPage] = useState(0);
@@ -188,28 +189,18 @@ export const CollegesList: FC = () => {
                   const labelId = `enhanced-table-${index}`;
 
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.name}
-                    >
-                      <TableCell padding="checkbox"></TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
+                    <TableRow hover tabIndex={-1} key={row.name}>
+                      <TableCell id={labelId} scope="row">
                         {row.name}
                       </TableCell>
-                      <TableCell>{row.category}</TableCell>
-                      <TableCell>{row.status}</TableCell>
-                      <TableCell>{row.lastModified}</TableCell>
+                      <TableCell align="center">{row.category}</TableCell>
+                      <TableCell align="center">{row.status}</TableCell>
+                      <TableCell align="center">{row.lastModified}</TableCell>
                       <TableCell align="center">
                         <NavLink
                           to={`/${getCollegeId(row.name)}`}
                           style={{ textDecoration: "none" }}
+                          onClick={() => setName(row.name)}
                         >
                           Edit
                         </NavLink>

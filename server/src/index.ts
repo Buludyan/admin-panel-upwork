@@ -12,6 +12,7 @@ app.use(
 );
 
 app.use('/colleges', router);
+app.use('/details', router);
 
 app.listen(4000, () => {
   console.log('Port working on 4000');

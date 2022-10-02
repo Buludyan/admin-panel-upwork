@@ -1,9 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
 import { collegesListReducer } from "../Slices/CollegesListSlice";
+import { detailsPageReducer } from "../Slices/DetailsPageSlice";
+import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({
   reducer: {
     colleges: collegesListReducer,
+    details: detailsPageReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -12,3 +14,4 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

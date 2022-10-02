@@ -1,7 +1,7 @@
-import { InitialState, ICollege } from "../Interfaces/Interfaces";
+import { CollegesIS, ICollege } from "../Interfaces/Interfaces";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState: InitialState = {
+const initialState: CollegesIS = {
   collegesData: null,
 };
 

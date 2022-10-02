@@ -3,6 +3,10 @@ export interface ICollege {
   SpecialisedIn: string;
 }
 
-export interface InitialState {
+export interface CollegesIS {
   collegesData: ICollege[] | null;
+}
+
+export interface DetailsIS {
+  collegeName: string;
 }

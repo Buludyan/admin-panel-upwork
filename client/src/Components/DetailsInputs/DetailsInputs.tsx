@@ -23,6 +23,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import icon from "../../Assets/icon.png";
 import { TeachersTable } from "../TeachersTable/TeachersTable";
 import { ReportsTable } from "../ReportsTable/ReportsTable";
+import { useAppSelector } from "../../Hooks/Selector";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -45,6 +46,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 }
 
 export const DetailsInputs = () => {
+  const { collegeName } = useAppSelector((state) => state.details);
   const theme = useTheme();
   const [personName, setPersonName] = React.useState<string[]>([]);
   const [state, setState] = useState("");
@@ -120,6 +122,7 @@ export const DetailsInputs = () => {
               label="College name"
               variant="outlined"
               sx={{ width: "650px" }}
+              value={collegeName}
             />
           </FormControl>
 

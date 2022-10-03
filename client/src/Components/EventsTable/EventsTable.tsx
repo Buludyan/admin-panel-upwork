@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./TeachersTable.scss";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,36 +9,25 @@ import Paper from "@mui/material/Paper";
 import { NavLink } from "react-router-dom";
 import { TablePagination, Typography } from "@mui/material";
 
-function createData(
-  name: string,
-  designation: string,
-  photo: string,
-  qualification: string,
-  description: string,
-  papers: number,
-  books: string
-) {
+function createData(title: string, date: string, link: string, image: string) {
   return {
-    name,
-    designation,
-    photo,
-    qualification,
-    description,
-    papers,
-    books,
+    title,
+    date,
+    link,
+    image,
   };
 }
 
 const rows = [
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
+  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
+  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
+  createData("Na Surna", "Decembr 10, 1999", "icon", "Bsc"),
+  createData("Na Surname", "Decembr 10, 1999", "icon", "Bsc"),
+  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
+  createData("Na Surna", "Decembr 10, 1999", "icon", "Bsc"),
 ];
 
-export const TeachersTable = () => {
+export const EventsTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(4);
   const [page, setPage] = useState(0);
 
@@ -58,9 +46,9 @@ export const TeachersTable = () => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <div className="teachers">
-      <div className="teachers__inner">
-        <Typography sx={{ m: "40px 10px 10px" }}>Teachers details:</Typography>
+    <div className="respone">
+      <div className="response__inner">
+        <Typography sx={{ m: "40px 10px 10px" }}>Events:</Typography>
         <TableContainer
           component={Paper}
           sx={{ borderTop: "1px solid black", borderRadius: 0 }}
@@ -68,13 +56,10 @@ export const TeachersTable = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="center">Designation</TableCell>
-                <TableCell align="center">Photo</TableCell>
-                <TableCell align="center">Qualification</TableCell>
-                <TableCell align="center">Description</TableCell>
-                <TableCell align="center">Papers</TableCell>
-                <TableCell align="center">Books</TableCell>
+                <TableCell>Title</TableCell>
+                <TableCell align="center">Date</TableCell>
+                <TableCell align="center">Links</TableCell>
+                <TableCell align="center">Images</TableCell>
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
@@ -88,14 +73,11 @@ export const TeachersTable = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row.title}
                     </TableCell>
-                    <TableCell align="center">{row.designation}</TableCell>
-                    <TableCell align="center">{row.photo}</TableCell>
-                    <TableCell align="center">{row.qualification}</TableCell>
-                    <TableCell align="center">{row.description}</TableCell>
-                    <TableCell align="center">{row.papers}</TableCell>
-                    <TableCell align="center">{row.books}</TableCell>
+                    <TableCell align="center">{row.date}</TableCell>
+                    <TableCell align="center">{row.link}</TableCell>
+                    <TableCell align="center">{row.image}</TableCell>
                     <TableCell align="center">
                       <NavLink to={`/`} style={{ textDecoration: "none" }}>
                         Edit

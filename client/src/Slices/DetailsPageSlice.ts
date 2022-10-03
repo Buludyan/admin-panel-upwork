@@ -1,16 +1,26 @@
+import { AxiosResponse } from "axios";
 import { adminPanelApi } from "./../Axios/Axios";
-import { DetailsIS } from "../Interfaces/Interfaces";
+import { DetailsIS, IDetails } from "../Interfaces/Interfaces";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: DetailsIS = {
   collegeName: "",
 };
 
-export const getCollegeDetails = createAsyncThunk<void, string>(
+export const getCollegeDetails = createAsyncThunk<IDetails, string>(
   "details/getCollegeDetails",
-  async function (id, { dispatch }) {
-    const collegeDetails = await adminPanelApi.fetchDetails({ id });
-    console.log(collegeDetails);
+  async function (id, { rejectWithValue }) {
+    const collegeDetails: AxiosResponse = await adminPanelApi.fetchDetails({
+      id,
+    });
+
+    if (!collegeDetails.data) {
+      return rejectWithValue("Error");
+    }
+
+    const details: IDetails = collegeDetails.data;
+
+    return details;
   }
 );
 
@@ -21,6 +31,14 @@ export const detailsPageSlice = createSlice({
     setName: (state, action: PayloadAction<string>) => {
       state.collegeName = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      getCollegeDetails.fulfilled,
+      (state, action: PayloadAction<IDetails>) => {
+        state.collegeName = action.payload.collegeName;
+      }
+    );
   },
 });
 

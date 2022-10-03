@@ -14,6 +14,7 @@ export const DetailsPage = () => {
       dispatch(getCollegeDetails(id.id));
     }
   }, [id.id, dispatch]);
+
   return (
     <div className="detailsPage">
       <div className="detailsPage__inner">

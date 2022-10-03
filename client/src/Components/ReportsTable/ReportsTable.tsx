@@ -48,7 +48,7 @@ export const ReportsTable = () => {
   return (
     <div className="respone">
       <div className="response__inner">
-        <Typography sx={{ m: "40px 10px" }}>Reports:</Typography>
+        <Typography sx={{ m: "40px 10px 10px" }}>Reports:</Typography>
         <TableContainer
           component={Paper}
           sx={{ borderTop: "1px solid black", borderRadius: 0 }}

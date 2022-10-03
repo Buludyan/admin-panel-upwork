@@ -24,6 +24,7 @@ import icon from "../../Assets/icon.png";
 import { TeachersTable } from "../TeachersTable/TeachersTable";
 import { ReportsTable } from "../ReportsTable/ReportsTable";
 import { useAppSelector } from "../../Hooks/Selector";
+import { EventsTable } from "../EventsTable/EventsTable";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -276,6 +277,7 @@ export const DetailsInputs = () => {
             />
           </FormControl>
         </div>
+        <EventsTable />
         <TeachersTable />
         <ReportsTable />
         <div className="detailsInputs__finalBtns">

@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./DetailsInputs.scss";
 import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -25,6 +25,7 @@ import { TeachersTable } from "../TeachersTable/TeachersTable";
 import { ReportsTable } from "../ReportsTable/ReportsTable";
 import { useAppSelector } from "../../Hooks/Selector";
 import { EventsTable } from "../EventsTable/EventsTable";
+import { useActions } from "../../Hooks/Actions";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -47,26 +48,27 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 }
 
 export const DetailsInputs = () => {
-  const { collegeName } = useAppSelector((state) => state.details);
+  const { collegeName, address } = useAppSelector((state) => state.details);
+  const { setState, setDistrict } = useActions();
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
-  const [state, setState] = useState("");
+  const [category, setCategory] = useState<string[]>([]);
   const [districtsList, setDistrictsList] = useState<string[] | null>(null);
-  const [district, setDistrict] = useState("");
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+  const handleChange = (event: SelectChangeEvent<typeof category>) => {
     const {
       target: { value },
     } = event;
-    setPersonName(typeof value === "string" ? value.split(",") : value);
+    setCategory(typeof value === "string" ? value.split(",") : value);
   };
+
+  useEffect(() => {
+    // @ts-ignore
+    setDistrictsList(distrcits[address.state]);
+  }, [address]);
 
   const handleStateChange = (event: SelectChangeEvent) => {
     setState(event.target.value);
     setDistrict("");
-
-    // @ts-ignore
-    setDistrictsList(distrcits[event.target.value]);
   };
 
   const handleDistrictChange = (event: SelectChangeEvent) => {
@@ -133,7 +135,7 @@ export const DetailsInputs = () => {
               labelId="categories"
               id="categories-chip"
               multiple
-              value={personName}
+              value={category}
               onChange={handleChange}
               input={
                 <OutlinedInput id="select-multiple-chip" label="Categories" />
@@ -153,7 +155,7 @@ export const DetailsInputs = () => {
                     <MenuItem
                       key={name}
                       value={name}
-                      style={getStyles(name, personName, theme)}
+                      style={getStyles(name, category, theme)}
                     >
                       {name}
                     </MenuItem>
@@ -173,7 +175,7 @@ export const DetailsInputs = () => {
             <Select
               labelId="state"
               id="state-select"
-              value={state}
+              value={address.state}
               label="State"
               onChange={handleStateChange}
             >
@@ -194,7 +196,7 @@ export const DetailsInputs = () => {
             <Select
               labelId="district"
               id="district-select"
-              value={district}
+              value={address.city}
               label="District"
               onChange={handleDistrictChange}
             >

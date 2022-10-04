@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,29 +7,39 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { NavLink } from "react-router-dom";
-import { TablePagination, Typography } from "@mui/material";
-
-function createData(title: string, date: string, link: string, image: string) {
-  return {
-    title,
-    date,
-    link,
-    image,
-  };
-}
-
-const rows = [
-  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Na Surna", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Na Surname", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Na Surna", "Decembr 10, 1999", "icon", "Bsc"),
-];
+import { Button, TablePagination, Typography } from "@mui/material";
+import "./EventsTable.scss";
+import { EventMW } from "../ModalWindows/EventMW/EventMW";
+import { useActions } from "../../Hooks/Actions";
+import { useAppSelector } from "../../Hooks/Selector";
+import { IIvent } from "../../Interfaces/Interfaces";
 
 export const EventsTable = () => {
+  const { setActiveAdd, setActiveEdit } = useActions();
+  const { events } = useAppSelector((state) => state.details);
+  const [rows, setRows] = useState<IIvent[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(4);
   const [page, setPage] = useState(0);
+
+  const createData = (
+    title: string,
+    date: string,
+    link: string,
+    image: string
+  ) => {
+    return {
+      title,
+      date,
+      link,
+      image,
+    };
+  };
+
+  useEffect(() => {
+    const newRows: IIvent[] = [];
+    events.map((event) => newRows.push(createData(...event)));
+    setRows(newRows);
+  }, [events]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -46,8 +56,8 @@ export const EventsTable = () => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <div className="respone">
-      <div className="response__inner">
+    <div className="events">
+      <div className="events__inner">
         <Typography sx={{ m: "40px 10px 10px" }}>Events:</Typography>
         <TableContainer
           component={Paper}
@@ -78,10 +88,19 @@ export const EventsTable = () => {
                     <TableCell align="center">{row.date}</TableCell>
                     <TableCell align="center">{row.link}</TableCell>
                     <TableCell align="center">{row.image}</TableCell>
-                    <TableCell align="center">
-                      <NavLink to={`/`} style={{ textDecoration: "none" }}>
-                        Edit
-                      </NavLink>
+                    <TableCell
+                      sx={{ cursor: "pointer" }}
+                      align="center"
+                      onClick={() =>
+                        setActiveEdit({
+                          title: row.title,
+                          date: row.date,
+                          link: row.link,
+                          image: row.image,
+                        })
+                      }
+                    >
+                      Edit
                     </TableCell>
                   </TableRow>
                 ))}
@@ -97,16 +116,20 @@ export const EventsTable = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <div className="events__footer">
+          <TablePagination
+            rowsPerPageOptions={[100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+          <Button onClick={() => setActiveAdd()}>Add new</Button>
+        </div>
       </div>
+      <EventMW />
     </div>
   );
 };

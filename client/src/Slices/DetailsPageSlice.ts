@@ -1,6 +1,7 @@
+import { IIvent, IDetails } from "./../Interfaces/Interfaces";
+import { ChangeEvent } from "react";
 import { AxiosResponse } from "axios";
 import { adminPanelApi } from "./../Axios/Axios";
-import { IDetails } from "../Interfaces/Interfaces";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: IDetails = {
@@ -20,7 +21,11 @@ const initialState: IDetails = {
   keywords: [],
   programs: [],
   images: [],
-  links: [],
+  links: [
+    ["linkedin", ""],
+    ["facebook", ""],
+    ["instagram", ""],
+  ],
   naacGrade: "",
   nirfReport: "",
   contactNumber: "",
@@ -60,6 +65,61 @@ export const detailsPageSlice = createSlice({
     },
     setDistrict: (state, action: PayloadAction<string>) => {
       state.address.city = action.payload;
+    },
+    setPrograms: (
+      state,
+      action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>
+    ) => {
+      state.programs = action.payload.target.value.split(",");
+    },
+    setPinCode: (
+      state,
+      action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>
+    ) => {
+      state.address.pinCode = action.payload.target.value;
+    },
+    setContact: (
+      state,
+      action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>
+    ) => {
+      state.contactNumber = action.payload.target.value;
+    },
+    setEmail: (
+      state,
+      action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>
+    ) => {
+      state.emailAddress = action.payload.target.value;
+    },
+    setNAAC: (
+      state,
+      action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>
+    ) => {
+      state.naacGrade = action.payload.target.value;
+    },
+    setNIRF: (
+      state,
+      action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>
+    ) => {
+      state.nirfReport = action.payload.target.value;
+    },
+    setDescription: (
+      state,
+      action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>
+    ) => {
+      state.description = action.payload.target.value;
+    },
+    setSocial: (
+      state,
+      action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>
+    ) => {
+      const { id, value } = action.payload.target;
+      state.links = state.links.map((soc): [string, string] =>
+        soc[0] === id ? (soc = [soc[0], value]) : soc
+      );
+    },
+    setEvent: (state, action: PayloadAction<IIvent>) => {
+      const { title, date, link, image } = action.payload;
+      state.events.push([title, date, link, image]);
     },
   },
   extraReducers: (builder) => {

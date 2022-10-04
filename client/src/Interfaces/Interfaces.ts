@@ -39,3 +39,10 @@ interface IAddress {
   latitude: string;
   longitude: string;
 }
+
+export interface IIvent {
+  title: string;
+  date: string;
+  link: string;
+  image: string;
+}

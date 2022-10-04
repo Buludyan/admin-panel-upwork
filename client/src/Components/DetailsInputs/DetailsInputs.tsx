@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./DetailsInputs.scss";
 import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -16,16 +16,17 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import { categories, states, distrcits } from "../../StaticData/StaticData";
+import { categories } from "../../StaticData/StaticData";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import icon from "../../Assets/icon.png";
 import { TeachersTable } from "../TeachersTable/TeachersTable";
 import { ReportsTable } from "../ReportsTable/ReportsTable";
 import { useAppSelector } from "../../Hooks/Selector";
 import { EventsTable } from "../EventsTable/EventsTable";
 import { useActions } from "../../Hooks/Actions";
+import { Address } from "./Address/Address";
+import { Social } from "./Social/Social";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -48,31 +49,18 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 }
 
 export const DetailsInputs = () => {
-  const { collegeName, address } = useAppSelector((state) => state.details);
-  const { setState, setDistrict } = useActions();
+  const { collegeName, programs, images, logo, nirfReport, naacGrade } =
+    useAppSelector((state) => state.details);
+  const { setPrograms, setNAAC, setNIRF } = useActions();
   const theme = useTheme();
+
   const [category, setCategory] = useState<string[]>([]);
-  const [districtsList, setDistrictsList] = useState<string[] | null>(null);
 
   const handleChange = (event: SelectChangeEvent<typeof category>) => {
     const {
       target: { value },
     } = event;
     setCategory(typeof value === "string" ? value.split(",") : value);
-  };
-
-  useEffect(() => {
-    // @ts-ignore
-    setDistrictsList(distrcits[address.state]);
-  }, [address]);
-
-  const handleStateChange = (event: SelectChangeEvent) => {
-    setState(event.target.value);
-    setDistrict("");
-  };
-
-  const handleDistrictChange = (event: SelectChangeEvent) => {
-    setDistrict(event.target.value);
   };
 
   return (
@@ -166,74 +154,29 @@ export const DetailsInputs = () => {
           </FormControl>
         </div>
         <FormControl sx={{ mt: 4, ml: 2 }}>
-          <TextField id="name" label="Programs" variant="outlined" />
+          <TextField
+            id="name"
+            label="Programs"
+            variant="outlined"
+            value={programs.join(",")}
+            onChange={(event) => setPrograms(event)}
+          />
         </FormControl>
-        <div className="detailsInputs__address">
-          <Typography ml={2}>Address:</Typography>
-          <FormControl sx={{ ml: 2, mt: 1 }}>
-            <InputLabel id="state">State</InputLabel>
-            <Select
-              labelId="state"
-              id="state-select"
-              value={address.state}
-              label="State"
-              onChange={handleStateChange}
-            >
-              {states.map((state) => {
-                return (
-                  <MenuItem key={state} value={state}>
-                    {state}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-          <FormControl
-            sx={{ ml: 2, mt: 1 }}
-            disabled={districtsList ? false : true}
-          >
-            <InputLabel id="district">District</InputLabel>
-            <Select
-              labelId="district"
-              id="district-select"
-              value={address.city}
-              label="District"
-              onChange={handleDistrictChange}
-            >
-              {districtsList &&
-                districtsList.map((district) => {
-                  return (
-                    <MenuItem key={district} value={district}>
-                      {district}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
-          </FormControl>
-          <FormControl sx={{ ml: 2, mt: 1 }}>
-            <TextField id="pin" label="Pin code" variant="outlined" />
-          </FormControl>
-          <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
-            <TextField id="contact" label="Contact" variant="outlined" />
-          </FormControl>
-          <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
-            <TextField id="email" label="Email id" variant="outlined" />
-          </FormControl>
-        </div>
+        <Address />
         <div className="detailsInputs__images">
           <Typography sx={{ ml: 2 }}>College images:</Typography>
           <div className="detailsInputs__imagesList">
-            {["1", "2", "3", "4"].map((img) => {
+            {images.map((img, idx) => {
               return (
                 <Card
                   sx={{ width: 100, ml: 2, mt: 1, textAlign: "center" }}
-                  key={img}
+                  key={idx}
                 >
                   <CardMedia
                     component="img"
-                    alt={img}
+                    alt="image"
                     height="80"
-                    image={icon}
+                    image={img[0]}
                   />
                   <Checkbox />
                 </Card>
@@ -244,41 +187,30 @@ export const DetailsInputs = () => {
         <div className="detailsInputs__logo">
           <Typography sx={{ ml: 2, mt: 3 }}>Logo:</Typography>
           <Card sx={{ width: 100, ml: 2, mt: 1, textAlign: "center" }}>
-            <CardMedia component="img" alt={"img"} height="80" image={icon} />
+            <CardMedia component="img" alt="logo" height="80" image={logo} />
           </Card>
         </div>
         <div className="detailsInputs__grade">
           <FormControl sx={{ ml: 2, mt: 1, width: "100px" }}>
-            <TextField id="naac" label="NAAC" variant="outlined" />
-          </FormControl>
-          <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
-            <TextField id="nirf" label="NIRF report" variant="outlined" />
-          </FormControl>
-        </div>
-        <div className="detailsInputs__social">
-          <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
-            <TextField id="linkedin" label="Linkedin URL" variant="outlined" />
-          </FormControl>
-          <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
-            <TextField id="facebook" label="Facebook URL" variant="outlined" />
-          </FormControl>
-          <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
             <TextField
-              id="instagram"
-              label="Instagram URL"
+              id="naac"
+              label="NAAC"
               variant="outlined"
+              value={naacGrade}
+              onChange={(event) => setNAAC(event)}
             />
           </FormControl>
           <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
             <TextField
-              id="description"
-              label="Description"
+              id="nirf"
+              label="NIRF report"
               variant="outlined"
-              rows={5}
-              multiline={true}
+              value={nirfReport}
+              onChange={(event) => setNIRF(event)}
             />
           </FormControl>
         </div>
+        <Social />
         <EventsTable />
         <TeachersTable />
         <ReportsTable />

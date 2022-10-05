@@ -190,9 +190,42 @@ export const detailsPageSlice = createSlice({
     builder.addCase(
       getCollegeDetails.fulfilled,
       (state, action: PayloadAction<IDetails>) => {
-        state.collegeName = action.payload.collegeName;
-        state.address.city = action.payload.address.city;
-        state.address.state = action.payload.address.state;
+        const {
+          collegeName,
+          address,
+          logo,
+          description,
+          meta,
+          keywords,
+          programs,
+          images,
+          links,
+          naacGrade,
+          nirfReport,
+          contactNumber,
+          emailAddress,
+          events,
+          teachers,
+          reports,
+        } = action.payload;
+        state.collegeName = collegeName;
+        state.address.city = address.city;
+        state.address.state = address.state;
+        state.address.pinCode = address.pinCode;
+        state.logo = logo;
+        state.description = description;
+        state.meta = meta;
+        state.keywords = keywords;
+        state.programs = programs;
+        state.images = images;
+        state.links = links;
+        state.naacGrade = naacGrade;
+        state.nirfReport = nirfReport;
+        state.contactNumber = contactNumber;
+        state.emailAddress = emailAddress;
+        state.events = events;
+        state.teachers = teachers;
+        state.reports = reports;
       }
     );
   },

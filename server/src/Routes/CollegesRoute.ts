@@ -6,5 +6,6 @@ const router = Router();
 
 router.post('/list', collegesController.getCollegesList);
 router.post('/edit', detailsController.getCollegeDetails);
+router.post('/save', detailsController.saveCollegeDetails);
 
 export {router};

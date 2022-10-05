@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardMedia,
   Checkbox,
@@ -51,7 +50,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 export const DetailsInputs = () => {
   const { collegeName, programs, images, logo, nirfReport, naacGrade } =
     useAppSelector((state) => state.details);
-  const { setPrograms, setNAAC, setNIRF } = useActions();
+  const { setPrograms, setNAAC, setNIRF, setName } = useActions();
   const theme = useTheme();
 
   const [category, setCategory] = useState<string[]>([]);
@@ -60,6 +59,7 @@ export const DetailsInputs = () => {
     const {
       target: { value },
     } = event;
+
     setCategory(typeof value === "string" ? value.split(",") : value);
   };
 
@@ -114,6 +114,7 @@ export const DetailsInputs = () => {
               variant="outlined"
               sx={{ width: "650px" }}
               value={collegeName}
+              onChange={(e) => setName(e.target.value)}
             />
           </FormControl>
 
@@ -214,11 +215,6 @@ export const DetailsInputs = () => {
         <EventsTable />
         <TeachersTable />
         <ReportsTable />
-        <div className="detailsInputs__finalBtns">
-          <Button variant="contained">Cancel</Button>
-          <Button variant="contained">Save as draft</Button>
-          <Button variant="contained">Submit</Button>
-        </div>
       </div>
     </div>
   );

@@ -40,6 +40,20 @@ class DetailsController {
       console.log(e);
     }
   }
+
+  saveCollegeDetails(req: Request, res: Response) {
+    try {
+      const {details, id} = req.body;
+      fs.writeFileSync(
+        path.join(__dirname, `../CollegesDetailsList/${id}.json`),
+        JSON.stringify(details)
+      );
+
+      res.json('Successfully saved');
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 export const detailsController = new DetailsController();

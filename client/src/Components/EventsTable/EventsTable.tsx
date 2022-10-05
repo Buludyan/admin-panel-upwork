@@ -6,8 +6,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { NavLink } from "react-router-dom";
-import { Button, TablePagination, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardMedia,
+  TablePagination,
+  Typography,
+} from "@mui/material";
 import "./EventsTable.scss";
 import { EventMW } from "../ModalWindows/EventMW/EventMW";
 import { useActions } from "../../Hooks/Actions";
@@ -15,7 +20,7 @@ import { useAppSelector } from "../../Hooks/Selector";
 import { IIvent } from "../../Interfaces/Interfaces";
 
 export const EventsTable = () => {
-  const { setActiveAdd, setActiveEdit } = useActions();
+  const { setActiveAddEvent, setActiveEditEvent } = useActions();
   const { events } = useAppSelector((state) => state.details);
   const [rows, setRows] = useState<IIvent[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(4);
@@ -87,16 +92,26 @@ export const EventsTable = () => {
                     </TableCell>
                     <TableCell align="center">{row.date}</TableCell>
                     <TableCell align="center">{row.link}</TableCell>
-                    <TableCell align="center">{row.image}</TableCell>
+                    <TableCell align="center" sx={{ width: "60px" }}>
+                      <Card sx={{ textAlign: "center" }}>
+                        <CardMedia
+                          component="img"
+                          alt="img"
+                          height="60"
+                          image={row.image}
+                        />
+                      </Card>
+                    </TableCell>
                     <TableCell
                       sx={{ cursor: "pointer" }}
                       align="center"
                       onClick={() =>
-                        setActiveEdit({
+                        setActiveEditEvent({
                           title: row.title,
                           date: row.date,
                           link: row.link,
                           image: row.image,
+                          id: index + "",
                         })
                       }
                     >
@@ -126,7 +141,7 @@ export const EventsTable = () => {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
-          <Button onClick={() => setActiveAdd()}>Add new</Button>
+          <Button onClick={() => setActiveAddEvent()}>Add new</Button>
         </div>
       </div>
       <EventMW />

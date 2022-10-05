@@ -6,9 +6,22 @@ import { IIvent } from "../../../Interfaces/Interfaces";
 import "./EventMW.scss";
 
 export const EventMW = () => {
-  const { isActive, eventTitle, eventDate, eventLink, eventImage, source } =
-    useAppSelector((state) => state.events);
-  const { setActiveAdd, setActiveEdit, setEvent, closeEdit } = useActions();
+  const {
+    isActive,
+    eventTitle,
+    eventDate,
+    eventLink,
+    eventImage,
+    source,
+    eventId,
+  } = useAppSelector((state) => state.events);
+  const {
+    setActiveAddEvent,
+    setEvent,
+    closeEditEvent,
+    updateEvent,
+    deleteEvent,
+  } = useActions();
 
   const [inputData, setInputData] = useState<IIvent>({
     title: "",
@@ -36,7 +49,7 @@ export const EventMW = () => {
   );
 
   const onEditCancel = () => {
-    closeEdit();
+    closeEditEvent();
     setEditInputData({
       title: eventTitle,
       date: eventDate,
@@ -46,14 +59,21 @@ export const EventMW = () => {
   };
 
   const onSaveHandler = () => {
-    setActiveAdd();
-    setEvent(inputData);
+    setActiveAddEvent();
+    source === "edit"
+      ? updateEvent({ ...editInputData, id: eventId })
+      : setEvent(inputData);
     setInputData({
       title: "",
       date: "",
       link: "",
       image: "",
     });
+  };
+
+  const onDeleteHandler = () => {
+    deleteEvent(eventId);
+    closeEditEvent();
   };
 
   const onChange = (name: string, value: string) => {
@@ -73,12 +93,13 @@ export const EventMW = () => {
   return (
     <div
       className={isActive ? "modalActive" : "modal"}
-      onClick={() => setActiveAdd()}
+      onClick={() => setActiveAddEvent()}
     >
       <div className="eventContent" onClick={(e) => e.stopPropagation()}>
         <Typography>Update events table</Typography>
-        <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
+        <FormControl sx={{ width: "300px" }}>
           <TextField
+            required
             name="title"
             label="Title"
             variant="outlined"
@@ -90,8 +111,9 @@ export const EventMW = () => {
             }
           />
         </FormControl>
-        <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
+        <FormControl sx={{ width: "300px" }}>
           <TextField
+            required
             name="date"
             label="Date"
             variant="outlined"
@@ -103,7 +125,7 @@ export const EventMW = () => {
             }
           />
         </FormControl>
-        <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
+        <FormControl sx={{ width: "300px" }}>
           <TextField
             name="link"
             label="Link"
@@ -116,7 +138,7 @@ export const EventMW = () => {
             }
           />
         </FormControl>
-        <FormControl sx={{ ml: 2, mt: 1, width: "300px" }}>
+        <FormControl sx={{ width: "300px" }}>
           <TextField
             name="image"
             label="Image"
@@ -131,6 +153,11 @@ export const EventMW = () => {
         </FormControl>
         <div className="eventContent__btns">
           <Button onClick={() => onEditCancel()}>Cancel</Button>
+          {source === "edit" && (
+            <Button variant="contained" color="error" onClick={onDeleteHandler}>
+              Delete
+            </Button>
+          )}
           <Button onClick={onSaveHandler}>Save</Button>
         </div>
       </div>

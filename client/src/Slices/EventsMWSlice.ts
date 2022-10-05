@@ -1,4 +1,4 @@
-import { IIvent } from "./../Interfaces/Interfaces";
+import { IEditEvent } from "./../Interfaces/Interfaces";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -8,13 +8,14 @@ const initialState = {
   eventDate: "",
   eventLink: "",
   eventImage: "",
+  eventId: "",
 };
 
 export const eventsMWSlice = createSlice({
-  name: "colleges",
+  name: "events",
   initialState,
   reducers: {
-    setActiveAdd: (state) => {
+    setActiveAddEvent: (state) => {
       state.isActive = !state.isActive;
       state.source = "add";
       state.eventTitle = "";
@@ -22,16 +23,17 @@ export const eventsMWSlice = createSlice({
       state.eventLink = "";
       state.eventImage = "";
     },
-    setActiveEdit: (state, action: PayloadAction<IIvent>) => {
-      const { title, date, link, image } = action.payload;
+    setActiveEditEvent: (state, action: PayloadAction<IEditEvent>) => {
+      const { title, date, link, image, id } = action.payload;
       state.isActive = !state.isActive;
       state.source = "edit";
       state.eventTitle = title;
       state.eventDate = date;
       state.eventLink = link;
       state.eventImage = image;
+      state.eventId = id;
     },
-    closeEdit: (state) => {
+    closeEditEvent: (state) => {
       state.isActive = false;
     },
   },

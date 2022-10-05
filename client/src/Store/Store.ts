@@ -2,12 +2,16 @@ import { eventsMWReducer } from "../Slices/EventsMWSlice";
 import { collegesListReducer } from "../Slices/CollegesListSlice";
 import { detailsPageReducer } from "../Slices/DetailsPageSlice";
 import { configureStore } from "@reduxjs/toolkit";
+import { teachersMWReducer } from "../Slices/TeachersMWSlice";
+import { reportsMWReducer } from "../Slices/ReportsMWSlice";
 
 export const store = configureStore({
   reducer: {
     colleges: collegesListReducer,
     details: detailsPageReducer,
     events: eventsMWReducer,
+    teachers: teachersMWReducer,
+    reports: reportsMWReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

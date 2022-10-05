@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,30 +6,33 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { NavLink } from "react-router-dom";
-import { TablePagination, Typography } from "@mui/material";
-
-function createData(name: string, date: string, link: string, image: string) {
-  return {
-    name,
-    date,
-    link,
-    image,
-  };
-}
-
-const rows = [
-  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Na Surna", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Na Surname", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Name Surname", "Decembr 10, 1999", "icon", "Bsc"),
-  createData("Na Surna", "Decembr 10, 1999", "icon", "Bsc"),
-];
+import { Card, CardMedia, TablePagination, Typography } from "@mui/material";
+import { useActions } from "../../Hooks/Actions";
+import { useAppSelector } from "../../Hooks/Selector";
+import { IReport } from "../../Interfaces/Interfaces";
+import { ReportsMW } from "../ModalWindows/ReportsMW/ReportsMW";
 
 export const ReportsTable = () => {
+  const { setActiveEditReport } = useActions();
+  const { reports } = useAppSelector((state) => state.details);
+  const [rows, setRows] = useState<IReport[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(4);
   const [page, setPage] = useState(0);
+
+  function createData(name: string, date: string, link: string, image: string) {
+    return {
+      name,
+      date,
+      link,
+      image,
+    };
+  }
+
+  useEffect(() => {
+    const newRows: IReport[] = [];
+    reports.map((report) => newRows.push(createData(...report)));
+    setRows(newRows);
+  }, [reports]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -77,11 +80,30 @@ export const ReportsTable = () => {
                     </TableCell>
                     <TableCell align="center">{row.date}</TableCell>
                     <TableCell align="center">{row.link}</TableCell>
-                    <TableCell align="center">{row.image}</TableCell>
-                    <TableCell align="center">
-                      <NavLink to={`/`} style={{ textDecoration: "none" }}>
-                        Edit
-                      </NavLink>
+                    <TableCell align="center" sx={{ width: "60px" }}>
+                      <Card sx={{ textAlign: "center" }}>
+                        <CardMedia
+                          component="img"
+                          alt="img"
+                          height="60"
+                          image={row.image}
+                        />
+                      </Card>
+                    </TableCell>
+                    <TableCell
+                      sx={{ cursor: "pointer" }}
+                      align="center"
+                      onClick={() =>
+                        setActiveEditReport({
+                          name: row.name,
+                          date: row.date,
+                          link: row.link,
+                          image: row.image,
+                          id: index + "",
+                        })
+                      }
+                    >
+                      Edit
                     </TableCell>
                   </TableRow>
                 ))}
@@ -107,6 +129,7 @@ export const ReportsTable = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </div>
+      <ReportsMW />
     </div>
   );
 };

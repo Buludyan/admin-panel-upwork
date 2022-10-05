@@ -46,3 +46,32 @@ export interface IIvent {
   link: string;
   image: string;
 }
+
+export interface IEditEvent extends IIvent {
+  id: string;
+}
+
+export interface ITeacher {
+  name: string;
+  designation: string;
+  photo: string;
+  qualification: string;
+  description: string;
+  papers: string;
+  books: string;
+}
+
+export interface IEditTeacher extends ITeacher {
+  id: string;
+}
+
+export interface IReport {
+  name: string;
+  date: string;
+  link: string;
+  image: string;
+}
+
+export interface IEditReport extends IReport {
+  id: string;
+}

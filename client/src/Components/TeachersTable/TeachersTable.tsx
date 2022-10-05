@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./TeachersTable.scss";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,41 +7,50 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { NavLink } from "react-router-dom";
-import { TablePagination, Typography } from "@mui/material";
-
-function createData(
-  name: string,
-  designation: string,
-  photo: string,
-  qualification: string,
-  description: string,
-  papers: number,
-  books: string
-) {
-  return {
-    name,
-    designation,
-    photo,
-    qualification,
-    description,
-    papers,
-    books,
-  };
-}
-
-const rows = [
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-  createData("Name Surname", "Professor", "icon", "Bsc", "lxi", 5, "as"),
-];
+import {
+  Button,
+  Card,
+  CardMedia,
+  TablePagination,
+  Typography,
+} from "@mui/material";
+import { useAppSelector } from "../../Hooks/Selector";
+import { ITeacher } from "../../Interfaces/Interfaces";
+import { useActions } from "../../Hooks/Actions";
+import { TeacherMW } from "../ModalWindows/TeachersMW/TeachersMW";
 
 export const TeachersTable = () => {
+  const { setActiveAddTeacher, setActiveEditTeacher } = useActions();
+  const { teachers } = useAppSelector((state) => state.details);
+  const [rows, setRows] = useState<ITeacher[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(4);
   const [page, setPage] = useState(0);
+
+  function createData(
+    name: string,
+    designation: string,
+    photo: string,
+    qualification: string,
+    description: string,
+    papers: string,
+    books: string
+  ) {
+    return {
+      name,
+      designation,
+      photo,
+      qualification,
+      description,
+      papers,
+      books,
+    };
+  }
+
+  useEffect(() => {
+    const newRows: ITeacher[] = [];
+    teachers.map((teacher) => newRows.push(createData(...teacher)));
+    setRows(newRows);
+  }, [teachers]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -91,15 +100,37 @@ export const TeachersTable = () => {
                       {row.name}
                     </TableCell>
                     <TableCell align="center">{row.designation}</TableCell>
-                    <TableCell align="center">{row.photo}</TableCell>
+                    <TableCell align="center" sx={{ width: "60px" }}>
+                      <Card sx={{ textAlign: "center" }}>
+                        <CardMedia
+                          component="img"
+                          alt="img"
+                          height="60"
+                          image={row.photo}
+                        />
+                      </Card>
+                    </TableCell>
                     <TableCell align="center">{row.qualification}</TableCell>
                     <TableCell align="center">{row.description}</TableCell>
                     <TableCell align="center">{row.papers}</TableCell>
                     <TableCell align="center">{row.books}</TableCell>
-                    <TableCell align="center">
-                      <NavLink to={`/`} style={{ textDecoration: "none" }}>
-                        Edit
-                      </NavLink>
+                    <TableCell
+                      sx={{ cursor: "pointer" }}
+                      align="center"
+                      onClick={() =>
+                        setActiveEditTeacher({
+                          name: row.name,
+                          designation: row.designation,
+                          photo: row.photo,
+                          qualification: row.qualification,
+                          description: row.description,
+                          papers: row.papers,
+                          books: row.books,
+                          id: index + "",
+                        })
+                      }
+                    >
+                      Edit
                     </TableCell>
                   </TableRow>
                 ))}
@@ -115,16 +146,20 @@ export const TeachersTable = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <div className="teachers__footer">
+          <TablePagination
+            rowsPerPageOptions={[100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+          <Button onClick={() => setActiveAddTeacher()}>Add new</Button>
+        </div>
       </div>
+      <TeacherMW />
     </div>
   );
 };

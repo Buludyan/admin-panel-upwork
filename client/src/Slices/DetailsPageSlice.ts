@@ -1,4 +1,11 @@
-import { IIvent, IDetails } from "./../Interfaces/Interfaces";
+import {
+  IIvent,
+  IDetails,
+  IEditEvent,
+  ITeacher,
+  IEditTeacher,
+  IEditReport,
+} from "./../Interfaces/Interfaces";
 import { ChangeEvent } from "react";
 import { AxiosResponse } from "axios";
 import { adminPanelApi } from "./../Axios/Axios";
@@ -119,7 +126,64 @@ export const detailsPageSlice = createSlice({
     },
     setEvent: (state, action: PayloadAction<IIvent>) => {
       const { title, date, link, image } = action.payload;
-      state.events.push([title, date, link, image]);
+      state.events.unshift([title, date, link, image]);
+    },
+    updateEvent: (state, action: PayloadAction<IEditEvent>) => {
+      const { title, date, link, image, id } = action.payload;
+      state.events[+id] = [title, date, link, image];
+    },
+    deleteEvent: (state, action: PayloadAction<string>) => {
+      const id = +action.payload;
+      state.events = state.events.filter((event, idx) => idx !== id);
+    },
+    setTeacher: (state, action: PayloadAction<ITeacher>) => {
+      const {
+        name,
+        designation,
+        photo,
+        qualification,
+        description,
+        papers,
+        books,
+      } = action.payload;
+      state.teachers.unshift([
+        name,
+        designation,
+        photo,
+        qualification,
+        description,
+        papers,
+        books,
+      ]);
+    },
+    updateTeacher: (state, action: PayloadAction<IEditTeacher>) => {
+      const {
+        name,
+        designation,
+        photo,
+        qualification,
+        description,
+        papers,
+        books,
+        id,
+      } = action.payload;
+      state.teachers[+id] = [
+        name,
+        designation,
+        photo,
+        qualification,
+        description,
+        papers,
+        books,
+      ];
+    },
+    deleteTeacher: (state, action: PayloadAction<string>) => {
+      const id = +action.payload;
+      state.teachers = state.teachers.filter((teacher, idx) => idx !== id);
+    },
+    updateReport: (state, action: PayloadAction<IEditReport>) => {
+      const { name, date, link, image, id } = action.payload;
+      state.reports[+id] = [name, date, link, image];
     },
   },
   extraReducers: (builder) => {

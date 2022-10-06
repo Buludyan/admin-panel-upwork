@@ -50,7 +50,8 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 export const DetailsInputs = () => {
   const { collegeName, programs, images, logo, nirfReport, naacGrade } =
     useAppSelector((state) => state.details);
-  const { setPrograms, setNAAC, setNIRF, setName } = useActions();
+  const { setPrograms, setNAAC, setNIRF, setName, setImageCheck } =
+    useActions();
   const theme = useTheme();
 
   const [category, setCategory] = useState<string[]>([]);
@@ -179,7 +180,10 @@ export const DetailsInputs = () => {
                     height="80"
                     image={img[0]}
                   />
-                  <Checkbox />
+                  <Checkbox
+                    checked={img[1] === "active" ? true : false}
+                    onClick={() => setImageCheck(idx)}
+                  />
                 </Card>
               );
             })}

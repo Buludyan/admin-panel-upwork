@@ -97,6 +97,11 @@ export const detailsPageSlice = createSlice({
     ) => {
       state.emailAddress = action.payload.target.value;
     },
+    setImageCheck: (state, action: PayloadAction<number>) => {
+      state.images[action.payload][1] === "active"
+        ? (state.images[action.payload][1] = "inactive")
+        : (state.images[action.payload][1] = "active");
+    },
     setNAAC: (
       state,
       action: PayloadAction<ChangeEvent<HTMLInputElement | HTMLTextAreaElement>>

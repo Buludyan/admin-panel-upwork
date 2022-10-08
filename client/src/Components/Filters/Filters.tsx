@@ -1,5 +1,5 @@
 import "./Filters.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -11,32 +11,34 @@ import {
   statuses,
 } from "../../StaticData/StaticData";
 import { SearchBtn } from "../SearchBtn/SearchBtn";
+import { useAppSelector } from "../../Hooks/Selector";
+import { useActions } from "../../Hooks/Actions";
 
 export const Filters = () => {
-  const [status, setStatus] = useState("");
-  const [state, setState] = useState("");
+  const { status, state, district, category } = useAppSelector(
+    (state) => state.colleges
+  );
+  const {
+    setSearchStatus,
+    setSearchState,
+    setSearchDistrict,
+    setSearchCategory,
+  } = useActions();
   const [districtsList, setDistrictsList] = useState<string[] | null>(null);
-  const [district, setDistrict] = useState("");
-  const [category, setCategory] = useState("");
 
-  const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value);
-  };
+  useEffect(() => {
+    // @ts-ignore
+    setDistrictsList(distrcits[state]);
+  }, [state]);
 
   const handleStateChange = (event: SelectChangeEvent) => {
-    setState(event.target.value);
-    setDistrict("");
-    setCategory("");
-    // @ts-ignore
-    setDistrictsList(distrcits[event.target.value]);
+    setSearchState(event.target.value);
+    setSearchDistrict("");
+    setSearchCategory("");
   };
 
   const handleDistrictChange = (event: SelectChangeEvent) => {
-    setDistrict(event.target.value);
-  };
-
-  const handleCategoryChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value);
+    setSearchDistrict(event.target.value);
   };
 
   return (
@@ -50,7 +52,7 @@ export const Filters = () => {
               id="status-select"
               value={status}
               label="Status"
-              onChange={handleStatusChange}
+              onChange={(event) => setSearchStatus(event.target.value)}
             >
               {statuses.map((status) => {
                 return (
@@ -111,7 +113,7 @@ export const Filters = () => {
               id="category-select"
               value={category}
               label="Category"
-              onChange={handleCategoryChange}
+              onChange={(event) => setSearchCategory(event.target.value)}
             >
               {categories.map((category) => {
                 return (
@@ -123,7 +125,7 @@ export const Filters = () => {
             </Select>
           </FormControl>
         </div>
-        <SearchBtn district={district} category={category} />
+        <SearchBtn />
       </div>
     </div>
   );

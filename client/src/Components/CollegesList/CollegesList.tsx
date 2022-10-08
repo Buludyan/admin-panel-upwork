@@ -1,4 +1,4 @@
-import React, { FC, useState, MouseEvent, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,54 +14,19 @@ import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { useAppSelector } from "../../Hooks/Selector";
 import { NavLink } from "react-router-dom";
+import { ICollege, ITime } from "../../Interfaces/Interfaces";
+import { useActions } from "../../Hooks/Actions";
 
 interface Data {
   name: string;
   category: string;
   status: string;
-  lastModified: number;
+  lastModified: ITime;
 }
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-type Order = "asc" | "desc";
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-interface EnhancedTableProps {
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
+function EnhancedTableHead() {
+  const { setOrder } = useActions();
+  const { order } = useAppSelector((state) => state.colleges);
 
   return (
     <TableHead>
@@ -69,21 +34,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableCell>Сollege name</TableCell>
         <TableCell align="center">Category</TableCell>
         <TableCell align="center">Status</TableCell>
-        <TableCell
-          align="center"
-          sortDirection={orderBy === "lastModified" ? order : false}
-        >
-          <TableSortLabel
-            active={orderBy === "lastModified"}
-            direction={orderBy === "lastModified" ? order : "asc"}
-            onClick={createSortHandler("lastModified")}
-          >
+        <TableCell align="center">
+          <TableSortLabel onClick={() => setOrder(order)} direction={order}>
             Last Modified
-            {orderBy === "lastModified" ? (
-              <Box component="span" sx={visuallyHidden}>
-                {order === "desc" ? "sorted descending" : "sorted ascending"}
-              </Box>
-            ) : null}
+            <Box component="span" sx={visuallyHidden}></Box>
           </TableSortLabel>
         </TableCell>
         <TableCell align="center">Action</TableCell>
@@ -114,34 +68,27 @@ const EnhancedTableToolbar = () => {
 
 export const CollegesList: FC = () => {
   const { collegesData } = useAppSelector((state) => state.colleges);
-  const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<keyof Data>("lastModified");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(100);
   const [rows, setRows] = useState<Data[]>([]);
 
+  const { order } = useAppSelector((state) => state.colleges);
+
   useEffect(() => {
     const rowsData: Data[] = [];
     collegesData &&
-      collegesData.map((college, idx) =>
+      collegesData.map((college: ICollege) =>
         rowsData.push({
           name: college.collegename,
           category: college.SpecialisedIn,
           status: college.status ? college.status : "No status yet",
-          lastModified: idx,
+          lastModified: college.lastModified
+            ? college.lastModified
+            : { timeToShow: "Not modified yet", ms: 0 },
         })
       );
     setRows([...rowsData]);
   }, [collegesData]);
-
-  const handleRequestSort = (
-    event: MouseEvent<unknown>,
-    property: keyof Data
-  ) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -172,16 +119,15 @@ export const CollegesList: FC = () => {
             aria-labelledby="tableTitle"
             size={"medium"}
           >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
+            <EnhancedTableHead />
             <TableBody>
               {rows
                 .slice()
-                .sort(getComparator(order, orderBy))
+                .sort((a, b) =>
+                  order === "desc"
+                    ? b.lastModified.ms - a.lastModified.ms
+                    : a.lastModified.ms - b.lastModified.ms
+                )
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-${index}`;
@@ -193,7 +139,9 @@ export const CollegesList: FC = () => {
                       </TableCell>
                       <TableCell align="center">{row.category}</TableCell>
                       <TableCell align="center">{row.status}</TableCell>
-                      <TableCell align="center">{row.lastModified}</TableCell>
+                      <TableCell align="center">
+                        {row.lastModified.timeToShow}
+                      </TableCell>
                       <TableCell align="center">
                         <NavLink
                           to={`/${getCollegeId(row.name)}`}

@@ -3,17 +3,17 @@ import "./SearchBtn.scss";
 import Button from "@mui/material/Button";
 import { adminPanelApi } from "../../Axios/Axios";
 import { useActions } from "../../Hooks/Actions";
+import { useAppSelector } from "../../Hooks/Selector";
 
-interface SearchBtnProps {
-  district: string;
-  category: string;
-}
-
-export const SearchBtn: FC<SearchBtnProps> = ({ district, category }) => {
+export const SearchBtn: FC = () => {
   const { setCollegesData } = useActions();
+  const { status, district, category } = useAppSelector(
+    (state) => state.colleges
+  );
 
   const handleSearchClick = async () => {
     const response = await adminPanelApi.fetchColleges({
+      status,
       district,
       category,
     });

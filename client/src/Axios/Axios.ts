@@ -7,6 +7,7 @@ const Axios = axios.create({
 
 export const adminPanelApi = {
   fetchColleges(data: {
+    status: string;
     district: string;
     category: string;
   }): Promise<AxiosResponse> {

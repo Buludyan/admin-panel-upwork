@@ -2,11 +2,21 @@ export interface ICollege {
   collegename: string;
   SpecialisedIn: string;
   status?: string;
-  lastModified?: string;
+  lastModified?: ITime;
+}
+
+export interface ITime {
+  timeToShow: string;
+  ms: number;
 }
 
 export interface CollegesIS {
+  status: string;
+  state: string;
+  district: string;
+  category: string;
   collegesData: ICollege[] | null;
+  order: "asc" | "desc";
 }
 
 export interface DetailsIS {

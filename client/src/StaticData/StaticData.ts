@@ -1,4 +1,4 @@
-export const statuses = ["Published", "Draft", "Review pending", "Reviewed"];
+export const statuses = ["None", "Publish", "Recheck", "Do not publish"];
 
 export const states = [
   "Andaman and Nicobar Islands",

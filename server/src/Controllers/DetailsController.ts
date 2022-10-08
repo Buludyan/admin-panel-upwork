@@ -54,7 +54,6 @@ class DetailsController {
         );
         return res.json(data);
       } else {
-        console.log('File exists');
         const collegeDetails = require(`../CollegesDetailsList/${id}.json`);
         return res.json(collegeDetails);
       }

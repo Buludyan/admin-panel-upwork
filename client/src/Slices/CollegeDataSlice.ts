@@ -1,4 +1,4 @@
-import { ICollege } from "../Interfaces/Interfaces";
+import { ICollege, ITime } from "../Interfaces/Interfaces";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SelectChangeEvent } from "@mui/material";
 import { adminPanelApi } from "../Axios/Axios";
@@ -8,7 +8,7 @@ const initialState: ICollege = {
   collegename: "",
   SpecialisedIn: "",
   status: "",
-  lastModified: "",
+  lastModified: { timeToShow: "", ms: 0 },
 };
 
 export const getCollegeData = createAsyncThunk<ICollege, string>(
@@ -52,8 +52,10 @@ export const collegeDataSlice = createSlice({
     setStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload;
     },
-    setLastModified: (state, action: PayloadAction<string>) => {
+    setLastModified: (state, action: PayloadAction<ITime>) => {
       state.lastModified = action.payload;
+
+      console.log(action.payload);
     },
   },
   extraReducers: (builder) => {

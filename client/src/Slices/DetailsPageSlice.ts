@@ -54,8 +54,6 @@ export const getCollegeDetails = createAsyncThunk<IDetails, string>(
     }
 
     const details: IDetails = collegeDetails.data;
-    console.log(details);
-
     return details;
   }
 );

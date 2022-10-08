@@ -67,6 +67,7 @@ export const categories = [
   "Para Medical",
   "Sports/Yoga/Physical Education",
   "Veterinary",
+  "Sanskrit",
 ];
 
 export const distrcits = {

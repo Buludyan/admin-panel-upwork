@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,SAAS,CAAC;EACN,UAAU,EAAE,IAAI;EAChB,UAAU,EAAE,eAAe;EAC3B,aAAa,EAAE,eAAe;CAQjC;;AANI,AAAD,iBAAS,CAAC;EACN,OAAO,EAAE,MAAM;EACf,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,aAAa;EAC9B,WAAW,EAAE,MAAM;CACtB",
+    "sources": [
+        "TeachersTable.scss"
+    ],
+    "names": [],
+    "file": "TeachersTable.css"
+}

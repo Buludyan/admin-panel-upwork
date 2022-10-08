@@ -5,7 +5,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
 import "./DetailsInputs.scss";
 import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -13,7 +12,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import { categories } from "../../StaticData/StaticData";
 import Radio from "@mui/material/Radio";
@@ -50,19 +49,17 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 export const DetailsInputs = () => {
   const { collegeName, programs, images, logo, nirfReport, naacGrade } =
     useAppSelector((state) => state.details);
-  const { setPrograms, setNAAC, setNIRF, setName, setImageCheck } =
-    useActions();
+  const { status, SpecialisedIn } = useAppSelector((state) => state.college);
+  const {
+    setPrograms,
+    setNAAC,
+    setNIRF,
+    setName,
+    setImageCheck,
+    setStatus,
+    setSpecialisedIn,
+  } = useActions();
   const theme = useTheme();
-
-  const [category, setCategory] = useState<string[]>([]);
-
-  const handleChange = (event: SelectChangeEvent<typeof category>) => {
-    const {
-      target: { value },
-    } = event;
-
-    setCategory(typeof value === "string" ? value.split(",") : value);
-  };
 
   return (
     <div className="detailsInputs">
@@ -93,16 +90,22 @@ export const DetailsInputs = () => {
                 value="Publish"
                 control={<Radio />}
                 label="Publish"
+                onClick={() => setStatus("Publish")}
+                checked={status === "Publish"}
               />
               <FormControlLabel
                 value="Recheck"
                 control={<Radio />}
                 label="Recheck"
+                onClick={() => setStatus("Recheck")}
+                checked={status === "Recheck"}
               />
               <FormControlLabel
                 value="Do not publish"
                 control={<Radio />}
                 label="Do not publish"
+                onClick={() => setStatus("Do not publish")}
+                checked={status === "Do not publish"}
               />
             </RadioGroup>
           </FormControl>
@@ -113,7 +116,7 @@ export const DetailsInputs = () => {
               id="name"
               label="College name"
               variant="outlined"
-              sx={{ width: "650px" }}
+              sx={{ width: "500px" }}
               value={collegeName}
               onChange={(e) => setName(e.target.value)}
             />
@@ -125,8 +128,8 @@ export const DetailsInputs = () => {
               labelId="categories"
               id="categories-chip"
               multiple
-              value={category}
-              onChange={handleChange}
+              value={SpecialisedIn ? SpecialisedIn.split(",") : []}
+              onChange={(event) => setSpecialisedIn(event)}
               input={
                 <OutlinedInput id="select-multiple-chip" label="Categories" />
               }
@@ -145,7 +148,11 @@ export const DetailsInputs = () => {
                     <MenuItem
                       key={name}
                       value={name}
-                      style={getStyles(name, category, theme)}
+                      style={getStyles(
+                        name,
+                        SpecialisedIn ? SpecialisedIn.split(",") : [],
+                        theme
+                      )}
                     >
                       {name}
                     </MenuItem>

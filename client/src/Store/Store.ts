@@ -1,3 +1,4 @@
+import { collegeDataReducer } from "../Slices/CollegeDataSlice";
 import { eventsMWReducer } from "../Slices/EventsMWSlice";
 import { collegesListReducer } from "../Slices/CollegesListSlice";
 import { detailsPageReducer } from "../Slices/DetailsPageSlice";
@@ -8,6 +9,7 @@ import { reportsMWReducer } from "../Slices/ReportsMWSlice";
 export const store = configureStore({
   reducer: {
     colleges: collegesListReducer,
+    college: collegeDataReducer,
     details: detailsPageReducer,
     events: eventsMWReducer,
     teachers: teachersMWReducer,

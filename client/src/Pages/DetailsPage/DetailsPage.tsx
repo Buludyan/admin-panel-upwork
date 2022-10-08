@@ -6,6 +6,7 @@ import { DetailsInputs } from "../../Components/DetailsInputs/DetailsInputs";
 import { useAppDispatch } from "../../Hooks/Dispatch";
 import { useAppSelector } from "../../Hooks/Selector";
 import { IDetails } from "../../Interfaces/Interfaces";
+import { getCollegeData } from "../../Slices/CollegeDataSlice";
 import { getCollegeDetails } from "../../Slices/DetailsPageSlice";
 import "./DetailsPage.scss";
 
@@ -13,18 +14,28 @@ export const DetailsPage = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const details = useAppSelector((state) => state.details);
+  const college = useAppSelector((state) => state.college);
 
-  const onSaveHandler = () => {
+  const onSaveHandler = async () => {
     const collegeDetails: IDetails = {
       ...details,
     };
 
-    if (id) adminPanelApi.saveDetails({ details: collegeDetails, id: id });
+    if (id) {
+      const response = await adminPanelApi.saveDetails({
+        details: collegeDetails,
+        college,
+        id: id,
+      });
+
+      console.log(response);
+    }
   };
 
   useEffect(() => {
     if (id !== undefined) {
       dispatch(getCollegeDetails(id));
+      dispatch(getCollegeData(id));
     }
   }, [id, dispatch]);
 

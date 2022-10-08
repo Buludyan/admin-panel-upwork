@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,aAAa,CAAC;EACV,KAAK,EAAE,GAAG;EACV,WAAW,EAAE,eAAe;CAC/B",
+    "sources": [
+        "CollegesListPage.scss"
+    ],
+    "names": [],
+    "file": "CollegesListPage.css"
+}

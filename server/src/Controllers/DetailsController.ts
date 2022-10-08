@@ -1,11 +1,33 @@
 import {Request, Response} from 'express';
 import * as fs from 'fs';
 import path from 'path';
-import {getCollegeInitialData} from '../Helpers/GetInitalData';
-import {IDetails} from '../Interfaces/Interfaces';
+import {changeInitialData, getCollegeInitialData} from '../Helpers/InitalData';
+import {ICollege, IDetails} from '../Interfaces/Interfaces';
 const template: IDetails = require('../CollegesData/CollegeDetailsTemplate.json');
+const collegesData = require('../CollegesData/CollegesData.json');
 
 class DetailsController {
+  getCollegeData(req: Request, res: Response) {
+    const {id} = req.body;
+    const distKeys: string[] = Object.keys(collegesData);
+    let collegeData = {};
+
+    for (let i = 0; i < distKeys.length; ++i) {
+      collegesData[distKeys[i]].map((college: ICollege) => {
+        if (
+          college.collegename.slice(
+            college.collegename.indexOf('Id:') + 4,
+            college.collegename.indexOf(')')
+          ) === id
+        ) {
+          collegeData = college;
+        }
+      });
+    }
+
+    return res.json(collegeData);
+  }
+
   getCollegeDetails(req: Request, res: Response) {
     try {
       const {id} = req.body;
@@ -43,7 +65,15 @@ class DetailsController {
 
   saveCollegeDetails(req: Request, res: Response) {
     try {
-      const {details, id} = req.body;
+      const {details, college, id} = req.body;
+
+      const newCollegesData = changeInitialData(id, college);
+
+      fs.writeFileSync(
+        path.join(__dirname, `../CollegesData/CollegesData.json`),
+        JSON.stringify(newCollegesData)
+      );
+
       fs.writeFileSync(
         path.join(__dirname, `../CollegesDetailsList/${id}.json`),
         JSON.stringify(details)

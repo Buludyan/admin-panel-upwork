@@ -28,6 +28,7 @@ export const Address = () => {
   const handleDistrictChange = (event: SelectChangeEvent) => {
     setDistrict(event.target.value);
   };
+
   useEffect(() => {
     // @ts-ignore
     setDistrictsList(distrcits[address.state]);

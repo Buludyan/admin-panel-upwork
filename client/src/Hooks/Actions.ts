@@ -1,3 +1,4 @@
+import { collegeDataActions } from "../Slices/CollegeDataSlice";
 import { eventsMWActions } from "../Slices/EventsMWSlice";
 import { collegesListActions } from "../Slices/CollegesListSlice";
 import { bindActionCreators } from "@reduxjs/toolkit";
@@ -8,6 +9,7 @@ import { reportsMWActions } from "../Slices/ReportsMWSlice";
 
 const actions = {
   ...collegesListActions,
+  ...collegeDataActions,
   ...detailsPageActions,
   ...eventsMWActions,
   ...teachersMWActions,

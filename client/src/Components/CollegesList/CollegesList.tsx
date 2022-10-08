@@ -14,7 +14,6 @@ import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { useAppSelector } from "../../Hooks/Selector";
 import { NavLink } from "react-router-dom";
-import { useActions } from "../../Hooks/Actions";
 
 interface Data {
   name: string;
@@ -115,7 +114,6 @@ const EnhancedTableToolbar = () => {
 
 export const CollegesList: FC = () => {
   const { collegesData } = useAppSelector((state) => state.colleges);
-  const { setName } = useActions();
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof Data>("lastModified");
   const [page, setPage] = useState(0);
@@ -129,7 +127,7 @@ export const CollegesList: FC = () => {
         rowsData.push({
           name: college.collegename,
           category: college.SpecialisedIn,
-          status: "No status yet",
+          status: college.status ? college.status : "No status yet",
           lastModified: idx,
         })
       );
@@ -200,7 +198,6 @@ export const CollegesList: FC = () => {
                         <NavLink
                           to={`/${getCollegeId(row.name)}`}
                           style={{ textDecoration: "none" }}
-                          onClick={() => setName(row.name)}
                         >
                           Edit
                         </NavLink>

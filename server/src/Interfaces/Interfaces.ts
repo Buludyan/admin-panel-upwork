@@ -1,6 +1,8 @@
 export interface ICollege {
   collegename: string;
   SpecialisedIn: string;
+  status?: string;
+  lastModified?: string;
 }
 
 export interface IDetails {

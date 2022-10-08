@@ -1,0 +1,20 @@
+.detailsPage {
+  width: 80%;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  border-left: 1px solid black;
+}
+
+.detailsPage__finalBtns {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  padding: 50px;
+}
+/*# sourceMappingURL=DetailsPage.css.map */

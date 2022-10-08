@@ -57,7 +57,9 @@ export const DetailsPage = () => {
             </NavLink>
           </Button>
           <Button variant="contained" onClick={onSaveHandler}>
-            Save as draft
+            <NavLink to="/" style={{ textDecoration: "none", color: "white" }}>
+              Save as draft
+            </NavLink>
           </Button>
           <Button variant="contained">Submit</Button>
         </div>

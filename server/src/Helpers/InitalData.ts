@@ -11,12 +11,7 @@ export const getCollegeInitialData = (id: string) => {
 
   for (let i = 0; i < distKeys.length; ++i) {
     collegesData[distKeys[i]].map((college: ICollege) => {
-      if (
-        college.collegename.slice(
-          college.collegename.indexOf('Id:') + 4,
-          college.collegename.indexOf(')')
-        ) === id
-      ) {
+      if (college.collegename.slice(name.length - 8, name.length - 1) === id) {
         name = college.collegename;
         city = distKeys[i];
       }
@@ -41,8 +36,8 @@ export const changeInitialData = (id: string, college: ICollege) => {
       (col: ICollege) => {
         if (
           col.collegename.slice(
-            col.collegename.indexOf('Id:') + 4,
-            col.collegename.indexOf(')')
+            col.collegename.length - 8,
+            col.collegename.length - 1
           ) === id
         ) {
           col = college;

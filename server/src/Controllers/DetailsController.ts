@@ -16,8 +16,8 @@ class DetailsController {
       collegesData[distKeys[i]].map((college: ICollege) => {
         if (
           college.collegename.slice(
-            college.collegename.indexOf('Id:') + 4,
-            college.collegename.indexOf(')')
+            college.collegename.length - 8,
+            college.collegename.length - 1
           ) === id
         ) {
           collegeData = college;

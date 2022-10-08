@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { adminPanelApi } from "../../Axios/Axios";
 import { DetailsInputs } from "../../Components/DetailsInputs/DetailsInputs";
-import { useActions } from "../../Hooks/Actions";
 import { useAppDispatch } from "../../Hooks/Dispatch";
 import { useAppSelector } from "../../Hooks/Selector";
 import { IDetails } from "../../Interfaces/Interfaces";
@@ -23,7 +22,7 @@ export const DetailsPage = () => {
     };
 
     if (id) {
-      const response = await adminPanelApi.saveDetails({
+      await adminPanelApi.saveDetails({
         details: collegeDetails,
         college: {
           ...college,
@@ -34,8 +33,6 @@ export const DetailsPage = () => {
         },
         id: id,
       });
-
-      console.log(response);
     }
   };
 

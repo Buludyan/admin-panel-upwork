@@ -102,7 +102,7 @@ export const CollegesList: FC = () => {
   };
 
   const getCollegeId = (name: string): string => {
-    const id = name.slice(name.indexOf("Id:") + 4, name.indexOf(")"));
+    const id = name.slice(name.length - 8, name.length - 1);
     return id;
   };
 

@@ -54,8 +54,6 @@ export const collegeDataSlice = createSlice({
     },
     setLastModified: (state, action: PayloadAction<ITime>) => {
       state.lastModified = action.payload;
-
-      console.log(action.payload);
     },
   },
   extraReducers: (builder) => {
